@@ -51,7 +51,6 @@
           <% else %>
             <%= render 'bookmarks/bookmark_item_module', bookmarkable: bookmarkable %>
           <% end %>
-          <div class="new dynamic" id="bookmark_form_placement_for_<%= (bookmarkable.blank? ? "#{bookmark.id}" : "#{bookmarkable.id}")%>"></div>
           <%= render 'bookmarks/bookmark_user_module', bookmark: bookmark %>
         <% end %>
       </blockquote>
