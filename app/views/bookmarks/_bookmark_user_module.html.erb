@@ -52,7 +52,7 @@
     <%# end of information added by the bookmark owner %>
   <% end %>
 
-  <% if is_author_of?(bookmark) %>
+  <% if is_author_of?(bookmark) && controller.controller_name != "collection_items"%>
     <%= render "bookmarks/bookmark_owner_navigation", bookmark: bookmark %>
   <% elsif policy(bookmark).show_admin_options? %>
     <%= render "admin/admin_options", item: bookmark %>
