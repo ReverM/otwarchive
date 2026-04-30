@@ -3,6 +3,7 @@
 # we need bookmarkable, action (create or update), and bookmark if it exists
 # if in_page is true then we assume that this is embedded within another page (eg the work page)
 # if dynamic is true then this has been rendered via ajax 
+# if from_list is true then we assume that this is visible from a list of bookmarks (eg the bookmarks page)
 %>
 <div class="<% if bookmark.new_record? && bookmarkable.class == ExternalWork %>verbose <% end %>post bookmark" id="bookmark-form">
   <h3 class="landmark heading"><%= ts("Bookmark") %></h3>
@@ -12,6 +13,7 @@
 
   <% in_page ||= false %>
   <% dynamic ||= false %>
+  <% from_list ||= false %>
 
   <% bookmark_form_id = (bookmarkable.blank? ? "#{bookmark.id}" : "#{bookmarkable.id}") %>
   <% notes_id = "bookmark_notes" + (dynamic ? "_#{bookmark_form_id}" : "") %>
@@ -19,7 +21,7 @@
   <% # Note telling users about our bookmarklet for external links %>
   <% if !dynamic && bookmarkable.class == ExternalWork %><%= render "bookmarks/bookmarklet" %><% end %>
 
-  <%= form_for(:bookmark, :url => bookmark_form_path(bookmark, bookmarkable), :html => {:method => bookmark.new_record? ? :post : :put}) do |f| %>
+  <%= form_for(:bookmark, :url => bookmark_form_path(bookmark, bookmarkable), :html => {:method => bookmark.new_record? ? :post : :put, :"data-remote" => from_list && !bookmark.new_record?}) do |f| %>
     <% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
       <p class="required notice">* <%= ts('Required information') %></p>
     <% end %>
@@ -101,7 +103,7 @@
           <%= f.check_box :rec %> <%= f.label :rec, ts("Rec") %>
         </p>
         <p class="submit actions">
-          <%= f.submit(button_name) %>
+          <%= f.submit button_name, id: from_list && !bookmark.new_record? ? "bookmark_update_dynamic" : "" %>
           <% unless in_page %>
             <%= link_to ts("My Bookmarks"), user_bookmarks_path(current_user) %>
           <% end %>

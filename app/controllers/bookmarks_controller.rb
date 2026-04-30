@@ -252,16 +252,31 @@ class BookmarksController < ApplicationController
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
-
     if @bookmark.update(bookmark_params) && errors.empty?
       flash[:notice] = flash[:notice] ? " " + flash[:notice] : ""
       flash[:notice] = ts("Bookmark was successfully updated.").html_safe + flash[:notice]
       flash[:notice] += t("bookmarks.create.warnings.private_bookmark_added_to_collection") if new_collections.any? || unapproved_collections.any?
       flash[:notice] = flash[:notice].html_safe
-      redirect_to(@bookmark)
+      respond_to do |format|
+        format.html do
+          redirect_to(@bookmark)
+        end
+        format.js do
+          @bookmark_has_been_updated = true
+          @bookmarkable = @bookmark.bookmarkable
+        end
+      end
     else
       @bookmarkable = @bookmark.bookmarkable
-      render :edit and return
+      respond_to do |format|
+        format.html do
+          render :edit and return
+        end
+        format.js do
+          @bookmark_has_been_updated = false
+          render :update
+        end
+      end
     end
   end
 

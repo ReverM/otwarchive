@@ -36,8 +36,11 @@
     <%= render "admin/admin_options", item: bookmarkable %>
   <% end %>
 
-  <%# bookmark form loaded here if requested %>
-  <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmarkable.id %>"></div>
+  <% # bookmark form alerts loaded here if requested %>
+  <div id="bookmark_form_alert_placement_for_<%= bookmarkable.id %>"></div>
+
+  <% # bookmark form loaded here if requested %>
+  <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmarkable.id %>" from-list=<%= controller.controller_name == "bookmarks" && (controller.action_name == "index" || controller.action_name == "search") %>></div>
 
   <div class="recent module group">
     <ul class="bookmark index group">
