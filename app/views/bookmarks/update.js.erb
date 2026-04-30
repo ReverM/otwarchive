@@ -1,11 +1,7 @@
 <% bookmark_id  ="#{@bookmark.id}" %>
 <% bookmark_form_id = (@bookmarkable.blank? ? "#{@bookmark.id}" : "#{@bookmarkable.id}") %>
-var form_div = $j("#bookmark_form_placement_for_<%= bookmark_form_id %>");
-var form_alerts = $j("#bookmark_form_alert_placement_for_<%= bookmark_form_id %>");
-var blurb = $j("#bookmark_<%= bookmark_id %>").find(".own.user.module.group");
-
-$j("#bookmark_form_placement_for_<%= bookmark_form_id %>").children().remove();
-$j("#bookmark_form_placement_for_<%= bookmark_form_id %>").html("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: ts("Update"), action: :update, in_page: true, dynamic: true, from_list: true) %>");
+// Re-render the form since some tags might get removed if they are not valid (i.e spaces)
+$j("#bookmark_form_placement_for_<%= bookmark_form_id %>").children().replaceWith("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: ts("Update"), action: :update, in_page: true, dynamic: true, from_list: true) %>");
 
 $j("#bookmark_form_close_for_<%= bookmark_form_id %>").click(function(){
   $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").hide();
@@ -14,15 +10,31 @@ $j("#bookmark_form_close_for_<%= bookmark_form_id %>").click(function(){
 });
 
 <% if @bookmark_has_been_updated %>
+    // Place the notice that the bookmark was succesfully
     $j("#bookmark_form_alert_placement_for_<%= bookmark_form_id %>").html("<%= escape_javascript(flash_div :error, :caution, :notice, :alert)%>");
+
+    // Re-render the blurb
     $j("#bookmark_<%= bookmark_id %>").find(".own.user.module.group").replaceWith("<%= escape_javascript(render "bookmarks/bookmark_user_module", bookmark: @bookmark)%>");
+    $j(".own.user.short.blurb.group").replaceWith("<%= escape_javascript(render "bookmarks/bookmark_blurb_short", bookmark: @bookmark)%>");
+
+    // Update the bookmark symbols and count
+    $j("#bookmark_<%= bookmark_id %>").find(".help.symbol.question.modal").replaceWith("<%= escape_javascript(get_symbol_for_bookmark(@bookmark))%>");
+    $j("#bookmark_<%= bookmark_id %>").find("p.status .count").replaceWith("<%= escape_javascript(get_count_for_bookmark_blurb(@bookmarkable))%>");
+    $j("#bookmark_<%= bookmark_id %>").find(".stats .bookmarks a").text("<%= @bookmarkable.public_bookmark_count %>");
+
+    $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").slideUp()
+
+    // Redefine some jqueries that needs to be redefined since the blurb got re-rendered
     $j('.actions').children('.share').removeClass('hidden');
-    $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").slideUp(function() {
-        $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").children().remove();
+    $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").click(function(event){
+        $j("#bookmark_form_alert_placement_for_<%= bookmark_form_id %>").children().remove()
         $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").show();
-    });   
-    <% flash.clear() %>
+        $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").hide();
+        event.preventDefault();
+    });
+    $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").show();
 <% else %>
     $j("#bookmark_form_alert_placement_for_<%= bookmark_form_id %>").html("<%= escape_javascript(error_messages_for :bookmark)%>");
-    <% flash.clear() %>
 <% end %>
+
+<% flash.clear() %>
