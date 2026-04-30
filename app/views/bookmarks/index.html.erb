@@ -41,8 +41,11 @@
 <!--/subnav-->
 
 <% if params[:work_id] || params[:series_id] || params[:external_work_id] %>
+  <% # bookmark form alerts loaded here if requested %>
+  <div id="bookmark_form_alert_placement_for_<%= bookmark_form_id %>"></div>
+
   <% # bookmark form loaded here if requested %>
-  <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmark_form_id %>"></div>
+  <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmark_form_id %>" from-list=<%= controller.controller_name == "bookmarks" && (controller.action_name == "index" || controller.action_name == "search") %>></div>
 <% end %>
 
 <% unless @owner.present? || @bookmarkable.present? %>

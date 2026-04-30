@@ -2,8 +2,15 @@
 <% bookmark_form_id = (@bookmarkable.blank? ? "#{@bookmark.id}" : "#{@bookmarkable.id}") %>
 
 var bookmark_div = $j("#bookmark_form_placement_for_<%= bookmark_form_id %>");
+var from_list = bookmark_div.attr("from-list");
 
-if (!bookmark_div.children().length) { bookmark_div.html("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: @button_name, action: @action, in_page: true, dynamic: true) %>"); }
+if (!bookmark_div.children().length) {
+  if (from_list == "true") {
+    bookmark_div.html("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: @button_name, action: @action, in_page: true, dynamic: true, from_list: true) %>");
+  } else {
+    bookmark_div.html("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: @button_name, action: @action, in_page: true, dynamic: true, from_list: false) %>");
+  }
+}
 $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").hide();
 
 $j("#bookmark_form_close_for_<%= bookmark_form_id %>").click(function(){

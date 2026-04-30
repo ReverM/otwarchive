@@ -5,8 +5,12 @@
 
   <% if bookmarkable.blank? %>
     <p class="message"><%= t(".deleted") %></p>
+
+    <% # bookmark form alerts loaded here%>
+    <div id="bookmark_form_alert_placement_for_<%= bookmark_form_id %>"></div>
+
     <% # Bookmarks of deleted items need a div because they can still be edited. %>
-    <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmark_form_id %>"></div>
+    <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmark_form_id %>" from-list=<%= controller.controller_name == "bookmarks" && (controller.action_name == "index" || controller.action_name == "search") %>></div>
   <% else %>
     <!--bookmark icons-->
     <% bookmark_count = bookmarkable.public_bookmark_count %>
@@ -34,8 +38,11 @@
       </ul>
     <% end %>
 
+    <% # bookmark form alerts loaded here if requested %>
+    <div id="bookmark_form_alert_placement_for_<%= bookmark_form_id %>"></div>
+
     <% # bookmark form loaded here if requested %>
-    <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmark_form_id %>"></div>
+    <div class="new dynamic" id="bookmark_form_placement_for_<%= bookmark_form_id %>" from-list=<%= controller.controller_name == "bookmarks" && (controller.action_name == "index" || controller.action_name == "search") %>></div>
   <% end %>
 
   <%= render "bookmarks/bookmark_user_module", bookmark: bookmark %>
