@@ -18,8 +18,13 @@
     $j(".own.user.short.blurb.group").replaceWith("<%= escape_javascript(render "bookmarks/bookmark_blurb_short", bookmark: @bookmark) %>");
 
     // Update the bookmark symbols and count
+<<<<<<< HEAD
     $j("#bookmark_<%= bookmark_id %>").find("p.status .help.symbol.question.modal").replaceWith("<%= escape_javascript(get_symbol_for_bookmark(@bookmark)) %>");
     $j("#bookmark_<%= bookmark_id %>").find("p.status .count").replaceWith("<%= escape_javascript(get_count_for_bookmark_blurb(@bookmarkable)) %>");
+=======
+    $j("#bookmark_<%= bookmark_id %>").find("p.status .help.symbol.question.modal").replaceWith("<%= escape_javascript(get_symbol_for_bookmark(@bookmark))%>");
+    $j("#bookmark_<%= bookmark_id %>").find("p.status .count").replaceWith("<%= escape_javascript(get_count_for_bookmark_blurb(@bookmarkable))%>");
+>>>>>>> dd6e2b07c (Made the update button say please wait when waiting)
     $j("#bookmark_<%= bookmark_id %>").find(".stats .bookmarks a").text("<%= @bookmarkable.public_bookmark_count %>");
 
     // Hide the form and change the submit text to Update so next time the form is opened it doesn't say "Please Wait..."
