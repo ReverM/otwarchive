@@ -664,6 +664,8 @@ en:
       deleted: This has been deleted, sorry!
       save: Save
       saved: Saved
+    bookmark_form:
+      processing_message: Please wait...
     bookmark_owner_navigation:
       delete: Delete
       delete_confirmation: Are you sure you want to delete this bookmark?
