@@ -250,6 +250,7 @@ class BookmarksController < ApplicationController
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
+
     if @bookmark.update(bookmark_params) && errors.empty?
       flash[:notice] = flash[:notice] ? " " + flash[:notice] : ""
       flash[:notice] = ts("Bookmark was successfully updated.").html_safe + flash[:notice]
