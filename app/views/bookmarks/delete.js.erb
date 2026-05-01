@@ -1,0 +1,3 @@
+$j("#bookmark_<%= @bookmark_id %>").replaceWith("<%= escape_javascript(flash_div :error, :caution, :notice, :alert) %>");
+
+<% flash.clear() %>

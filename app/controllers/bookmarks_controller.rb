@@ -301,9 +301,17 @@ class BookmarksController < ApplicationController
   # DELETE /bookmarks/1
   # DELETE /bookmarks/1.xml
   def destroy
+    @bookmark_id = @bookmark.id
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
-    redirect_to user_bookmarks_path(current_user)
+    respond_to do |format|
+      format.html do
+        redirect_to user_bookmarks_path(current_user)
+      end
+      format.js do 
+        render :delete
+      end
+    end
   end
 
   protected
