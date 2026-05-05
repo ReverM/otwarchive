@@ -181,6 +181,7 @@ class BookmarksController < ApplicationController
   # GET /bookmarks/1/edit
   def edit
     @bookmarkable = @bookmark.bookmarkable
+    @from_list = params[:from_list]
     respond_to do |format|
       format.html
       format.js {
