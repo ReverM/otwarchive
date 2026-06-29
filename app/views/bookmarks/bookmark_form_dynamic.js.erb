@@ -16,7 +16,7 @@ $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").hide();
 $j("#bookmark_form_close_for_<%= bookmark_form_id %>").click(function(){
   $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").hide();
   $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").show();
-  $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").attr("href", j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").attr("data-path"));
+  $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").attr("href", $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").attr("data-path"));
 });
 
 // if canceled we don't want to generate the form a second time, just reopen it

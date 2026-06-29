@@ -450,6 +450,19 @@ When "I follow {string} in the blurb for {word}'s bookmark of {string}" do |link
   find("#bookmark_#{bookmark_id}").click_link(link)
 end
 
+When "I press {string} in the blurb for {word}'s bookmark of {string}" do |button, login, title|
+  user = User.find_by(login: login)
+  work = Work.find_by(title: title)
+  bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
+  within("#bookmark_#{bookmark_id}") do
+    if @javascript
+      page.find_button(button).execute_script("this.click()")
+    else
+      click_button(button)
+    end
+  end
+end
+
 When "I confirm the bookmark's deletion" do
   expect(page.accept_alert).to eq("Are you sure you want to delete this bookmark?") if @javascript
 end
@@ -465,6 +478,24 @@ Then "the {word} bookmark form should be open in the bookmarkable blurb for {str
     when "new"
       step %{I should not see "Save"}
     end
+  end
+end
+
+Then "I should see {string} within the blurb for {word}'s bookmark of {string}" do |text, login, title|
+  user = User.find_by(login: login)
+  work = Work.find_by(title: title)
+  bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
+  within("#bookmark_#{bookmark_id}") do
+    step %{I should see "#{text}"}
+  end
+end
+
+Then "I should not see {string} within the blurb for {word}'s bookmark of {string}" do |action, login, title|
+  user = User.find_by(login: login)
+  work = Work.find_by(title: title)
+  bookmark_id = user.bookmarks.find_by(bookmarkable: work).id
+  within("#bookmark_#{bookmark_id}") do
+    step %{I should not see "#{text}"}
   end
 end
 

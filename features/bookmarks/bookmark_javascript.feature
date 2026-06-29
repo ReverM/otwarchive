@@ -1,8 +1,8 @@
 @bookmarks @javascript
-Feature: Create, edit and delete bookmarks with javascript enabled
+Feature: Create, update, edit and delete bookmarks with javascript enabled
   In order to have a good user experience
   As a humble user
-  I want to be able to create, edit and delete bookmarks with javascript enabled
+  I want to be able to create, update, edit and delete bookmarks with javascript enabled
   
   Background:
     Given I am logged in as "recengine"
@@ -11,38 +11,38 @@ Feature: Create, edit and delete bookmarks with javascript enabled
       And I bookmark the work "RedirectCorrectly"
 
   Scenario: The Bookmark button on a work's bookmark page correctly opens, closes, and reopens the form
-  When I am logged out
-    And I am logged in
-    And I am on the bookmarks page for the work "Bookmark: The Beginnings"
-    # Specify #main .navigation because the string and its plural form appear in a lot of places
-    # Open
-    And I follow "Bookmark" within "#main .navigation"
-  Then I should see "save a bookmark!"
-    And I should not see "Bookmark" within "#main .navigation"
-  # Close 
-  When I exit the bookmark form
-  Then I should see "Bookmark" within "#main .navigation"
-    And I should not see "save a bookmark!"
-  # Reopen
-  When I follow "Bookmark"
-  Then I should see "save a bookmark!"
-    And I should not see "Bookmark" within "#main .navigation"
+    When I am logged out
+      And I am logged in
+      And I am on the bookmarks page for the work "Bookmark: The Beginnings"
+      # Specify #main .navigation because the string and its plural form appear in a lot of places
+      # Open
+      And I follow "Bookmark" within "#main .navigation"
+    Then I should see "save a bookmark!"
+      And I should not see "Bookmark" within "#main .navigation"
+    # Close
+    When I exit the bookmark form
+    Then I should see "Bookmark" within "#main .navigation"
+      And I should not see "save a bookmark!"
+    # Reopen
+    When I follow "Bookmark"
+    Then I should see "save a bookmark!"
+      And I should not see "Bookmark" within "#main .navigation"
 
   Scenario: The Edit Bookmark button on a work's bookmark page correctly opens, closes, and reopens the edit form
-  When I am on the bookmarks page for the work "Bookmark: The Beginnings"
-  # Open
-    And I follow "Edit Bookmark"
-  Then I should see "save a bookmark!"
-    And I should not see "Edit Bookmark"
-    # Specify .own .actions because the string has some text in common with Edit Bookmark
-    And I should not see "Edit" within ".own .actions"
-  # Close
-  When I exit the bookmark form
-  Then I should see "Edit Bookmark"
-    And I should see "Edit" within ".own .actions"
-  # Reopen
-  When I follow "Edit"
-  Then I should see "save a bookmark!"
+    When I am on the bookmarks page for the work "Bookmark: The Beginnings"
+    # Open
+      And I follow "Edit Bookmark"
+    Then I should see "save a bookmark!"
+      And I should not see "Edit Bookmark"
+      # Specify .own .actions because the string has some text in common with Edit Bookmark
+      And I should not see "Edit" within ".own .actions"
+    # Close
+    When I exit the bookmark form
+    Then I should see "Edit Bookmark"
+      And I should see "Edit" within ".own .actions"
+    # Reopen
+    When I follow "Edit"
+    Then I should see "save a bookmark!"
 
   Scenario: The Edit button correctly opens, closes, and reopens edit forms when there are multiple bookmarks on a page
     When I am on the bookmarks page
@@ -134,6 +134,41 @@ Feature: Create, edit and delete bookmarks with javascript enabled
     When I follow "Save" in the bookmarkable blurb for "Bookmark: The Beginnings"
     Then the new bookmark form should be open in the bookmarkable blurb for "Bookmark: The Beginnings"
 
+  # In-place editing (AO3-5256)
+  Scenario: Updating a bookmark from a blurb with invalid fields does not close the form and displays an error message
+    When I am on the bookmarks page
+      And I follow "Edit" in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+      And I fill in "bookmark_tag_string_autocomplete" with "\"
+      And I press "Update" in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    Then the edit bookmark form should be open in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+      And I should see "cannot include the following restricted characters" within the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+
+  Scenario: Creating a new bookmark redirects you
+    When I am logged out
+      And I am logged in as "bookmarker"
+      And I go to the bookmarks page
+    When I follow "Save" in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+      And I press "Create" in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    Then I should not be on the bookmarks page
+
+  Scenario: Updating multiple bookmarks from the bookmarks page correctly closes forms. When reopened, the notices disappears
+    When I am on the bookmarks page
+      # Open
+      And I follow "Edit" in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    Then the edit bookmark form should be open in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    When I follow "Edit" in the blurb for recengine's bookmark of "Bookmark: The Sequel"
+    Then the edit bookmark form should be open in the blurb for recengine's bookmark of "Bookmark: The Sequel"
+    # Close
+    When I press "Update" in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    Then the edit bookmark form should be closed in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+      And I should see "Bookmark was successfully updated." within the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    When I press "Update" in the blurb for recengine's bookmark of "Bookmark: The Sequel"
+    Then the edit bookmark form should be closed in the blurb for recengine's bookmark of "Bookmark: The Sequel"
+      And I should see "Bookmark was successfully updated." within the blurb for recengine's bookmark of "Bookmark: The Sequel"
+    # Reopen
+    When I follow "Edit" in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+    Then the edit bookmark form should be open in the blurb for recengine's bookmark of "Bookmark: The Beginnings"
+      And I should not see "Bookmark was successfully updated." within the blurb for recengine's bookmark of "Bookmark: The Beginnings"
 
   # Deleting redirects (AO3-4989)
   Scenario: Deleting bookmarks from your bookmarks page does not reset the filtering
