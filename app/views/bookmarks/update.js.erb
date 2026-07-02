@@ -1,9 +1,9 @@
 <% bookmark_id = "#{@bookmark.id}" %>
-<% bookmark_form_id = (@bookmarkable.blank? ? "#{@bookmark.id}" : "#{@bookmarkable.id}") %>
+<% bookmark_form_id = @destination %>
 
 <% if @bookmark_has_been_updated %>
     // Re-render the form since some tags might get removed if they are not valid (i.e spaces)
-    $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").children().replaceWith("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: ts("Please Wait..."), action: :update, in_page: true, dynamic: true, from_list: true) %>");
+    $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").children().replaceWith("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: ts("Please Wait..."), action: :update, in_page: true, dynamic: true, on_screen: true) %>");
     $j("#bookmark_form_close_for_<%= bookmark_form_id %>").click(function(){
         $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").hide();
         $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").show();
@@ -38,11 +38,11 @@
     $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").show();
 <% else %>
     // Re-render the form since some tags might get removed if they are not valid (i.e spaces)
-    $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").children().replaceWith("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: ts("Update"), action: :update, in_page: true, dynamic: true, from_list: true) %>");
+    $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").children().replaceWith("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: ts("Update"), action: :update, in_page: true, dynamic: true, on_screen: true) %>");
     $j("#bookmark_form_close_for_<%= bookmark_form_id %>").click(function(){
         $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").hide();
         $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").show();
-        $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").attr("href", j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").attr("data-path"));
+        $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").attr("href", $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").attr("data-path"));
     });
     // Display error message
     $j("#bookmark_form_alert_placement_for_<%= bookmark_form_id %>").html("<%= escape_javascript(error_messages_for :bookmark) %>");

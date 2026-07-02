@@ -169,6 +169,7 @@ class BookmarksController < ApplicationController
     respond_to do |format|
       format.html
       format.js {
+        @destination = params[:destination].present? ? params[:destination] : @bookmark.id
         @button_name = ts("Create")
         @action = :create
         render action: "bookmark_form_dynamic"
@@ -182,6 +183,7 @@ class BookmarksController < ApplicationController
     respond_to do |format|
       format.html
       format.js {
+        @destination = params[:destination].present? ? params[:destination] : @bookmark.id
         @button_name = ts("Update")
         @action = :update
         render action: "bookmark_form_dynamic"
@@ -261,6 +263,7 @@ class BookmarksController < ApplicationController
         end
         format.js do
           @bookmark_has_been_updated = true
+          @destination = params[:bookmark][:destination].present? ? params[:bookmark][:destination] : @bookmark.id
           @bookmarkable = @bookmark.bookmarkable
         end
       end
@@ -272,6 +275,7 @@ class BookmarksController < ApplicationController
         end
         format.js do
           @bookmark_has_been_updated = false
+          @destination = params[:bookmark][:destination].present? ? params[:bookmark][:destination] : @bookmark.id
           render :update
         end
       end

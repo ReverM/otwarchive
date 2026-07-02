@@ -1,14 +1,17 @@
 <% # Use the bookmarkable item's id unless we're dealing with a bookmark of a deleted item %> 
-<% bookmark_form_id = (@bookmarkable.blank? ? "#{@bookmark.id}" : "#{@bookmarkable.id}") %>
+<% bookmark_form_id ="#{@destination}" %>
 
 var bookmark_div = $j("#bookmark_form_placement_for_<%= bookmark_form_id %>");
-var from_list = bookmark_div.attr("from-list");
-
+var on_screen = true;
+if ($j("#bookmark_<%= @bookmark.id %>").length === 0) {
+  on_screen = false;
+}
+console.log(on_screen);
 if (!bookmark_div.children().length) {
-  if (from_list == "true") {
-    bookmark_div.html("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: @button_name, action: @action, in_page: true, dynamic: true, from_list: true) %>");
+  if (on_screen == true) {
+    bookmark_div.html("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: @button_name, action: @action, in_page: true, dynamic: true, on_screen: true) %>");
   } else {
-    bookmark_div.html("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: @button_name, action: @action, in_page: true, dynamic: true, from_list: false) %>");
+    bookmark_div.html("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: @button_name, action: @action, in_page: true, dynamic: true, on_screen: false) %>");
   }
 }
 $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").hide();

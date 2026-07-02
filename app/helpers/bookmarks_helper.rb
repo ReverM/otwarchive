@@ -11,16 +11,16 @@ module BookmarksHelper
   end
 
   # returns just a url to the new bookmark form
-  def get_new_bookmark_path(bookmarkable)
+  def get_new_bookmark_path(bookmarkable, options = {})
     return case bookmarkable.class.to_s
     when "Chapter"
-      new_work_bookmark_path(bookmarkable.work)
+      new_work_bookmark_path(bookmarkable.work, options)
     when "Work"
-      new_work_bookmark_path(bookmarkable)
+      new_work_bookmark_path(bookmarkable, options)
     when "ExternalWork"
-      new_external_work_bookmark_path(bookmarkable)
+      new_external_work_bookmark_path(bookmarkable, options)
     when "Series"
-      new_series_bookmark_path(bookmarkable)
+      new_series_bookmark_path(bookmarkable, options)
     end
   end
 
