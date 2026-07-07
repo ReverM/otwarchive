@@ -2,13 +2,9 @@
 <% bookmark_form_id ="#{@destination}" %>
 
 var bookmark_div = $j("#bookmark_form_placement_for_<%= bookmark_form_id %>");
-var on_screen = true;
-if ($j("#bookmark_<%= @bookmark.id %>").length === 0) {
-  on_screen = false;
-}
-console.log(on_screen);
+
 if (!bookmark_div.children().length) {
-  if (on_screen == true) {
+  if ($j("#bookmark_<%= @bookmark.id %>").length !== 0) {
     bookmark_div.html("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: @button_name, action: @action, in_page: true, dynamic: true, on_screen: true) %>");
   } else {
     bookmark_div.html("<%= escape_javascript(render "bookmarks/bookmark_form", bookmarkable: @bookmarkable, bookmark: @bookmark, button_name: @button_name, action: @action, in_page: true, dynamic: true, on_screen: false) %>");
@@ -16,15 +12,4 @@ if (!bookmark_div.children().length) {
 }
 $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").hide();
 
-$j("#bookmark_form_close_for_<%= bookmark_form_id %>").click(function(){
-  $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").hide();
-  $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").show();
-  $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").attr("href", $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").attr("data-path"));
-});
-
-// if canceled we don't want to generate the form a second time, just reopen it
-$j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").click(function(event){
-  $j("#bookmark_form_placement_for_<%= bookmark_form_id %>").show();
-  $j(".bookmark_form_trigger_for_<%= bookmark_form_id %>").hide();
-  event.preventDefault();
-});
+<%= render "form_jquery", id: bookmark_form_id %>

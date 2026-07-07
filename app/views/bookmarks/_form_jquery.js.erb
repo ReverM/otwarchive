@@ -1,0 +1,14 @@
+// jqueries that needs to be defined in order to be able to close and open bookmark forms. Takes the id parameter
+
+$j("#bookmark_form_close_for_<%= id %>").click(function(){
+  $j("#bookmark_form_placement_for_<%= id %>").hide();
+  $j(".bookmark_form_trigger_for_<%= id %>").show();
+  $j(".bookmark_form_trigger_for_<%= id %>").attr("href", $j(".bookmark_form_trigger_for_<%= id %>").attr("data-path"));
+});
+
+// if canceled we don't want to generate the form a second time, just reopen it
+$j(".bookmark_form_trigger_for_<%= id %>").click(function(event){
+  $j("#bookmark_form_placement_for_<%= id %>").show();
+  $j(".bookmark_form_trigger_for_<%= id %>").hide();
+  event.preventDefault();
+});
