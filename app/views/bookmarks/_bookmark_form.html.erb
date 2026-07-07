@@ -15,8 +15,8 @@
   <% dynamic ||= false %>
   <% on_screen ||= false %>
 
-  <% bookmark_container_id = @destination %>
-  <% notes_id = "bookmark_notes" + (dynamic ? "_#{bookmark_container_id}" : "") %>
+  <% bookmark_form_id = @destination %>
+  <% notes_id = "bookmark_notes" + (dynamic ? "_#{bookmark_form_id}" : "") %>
 
   <% # Note telling users about our bookmarklet for external links %>
   <% if !dynamic && bookmarkable.class == ExternalWork %><%= render "bookmarks/bookmarklet" %><% end %>
@@ -30,9 +30,9 @@
       <% if in_page %>
         <p class="close actions">
           <% if dynamic %>
-            <a id="bookmark_form_close_for_<%= bookmark_container_id %>" aria-label="<%= ts('cancel') %>">&times;</a>
+            <a id="bookmark_form_close_for_<%= bookmark_form_id %>" aria-label="<%= ts('cancel') %>">&times;</a>
           <% else %>
-            <a class="bookmark_form_close_for_<%= bookmark_container_id %>" href="#comments" aria-label="<%= ts('cancel') %>">&times;</a>
+            <a class="bookmark_form_placement_close" href="#comments" aria-label="<%= ts('cancel') %>">&times;</a>
           <% end %>
         </p>
       <% end %>
